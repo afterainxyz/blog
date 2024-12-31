@@ -1,0 +1,55 @@
+baseURL: https://afterainxyz.github.io/
+title: afterain
+pagination.pagerSize: 10
+theme: PaperMod
+
+enableRobotsTXT: true
+
+params:
+  env: production # to enable google analytics, opengraph, twitter-cards and schema.
+  title: afterain
+  description: "afterain blog"
+  keywords: [Blog]
+  author: afterain
+
+  ShowReadingTime: true # 阅读时间
+  ShowBreadCrumbs: true # 面包屑导航
+  ShowPostNavLinks: true # 文章前后页按钮
+  ShowCodeCopyButtons: true
+  ShowToc: true
+  TocOpen: true
+
+  homeInfoParams:
+    Title: 'afterain' # 主题
+    Content: '个人分享' # 描述
+  SocialIcons:
+      - name: github # 可选
+        url: 'https://github.com/afteraincc'
+      - name: email # 可选
+        url: 'mailto:afterainxyz@gmail.com'
+menu:
+  main:
+    - identifier: archives
+      name: Archives
+      url: /archives/
+      weight: 10 # 重量越轻，就越往前面排，“1”则是置顶
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 20
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 30
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 40
+
+# for search
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
