@@ -5,6 +5,6 @@ lastmod: '{{ .Date }}'
 
 draft: true
 
-tags: ["first"]
+tags: [""]
 author: "afterain"
 ---
