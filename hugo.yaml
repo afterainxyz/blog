@@ -12,7 +12,7 @@ params:
   keywords: [Blog]
   author: afterain
 
-  ShowReadingTime: true # 阅读时间
+  ShowReadingTime: false # 阅读时间
   ShowBreadCrumbs: true # 面包屑导航
   ShowPostNavLinks: true # 文章前后页按钮
   ShowCodeCopyButtons: true
@@ -24,7 +24,7 @@ params:
     Content: '个人分享' # 描述
   SocialIcons:
       - name: github # 可选
-        url: 'https://github.com/afteraincc'
+        url: 'https://github.com/afterainxyz'
       - name: email # 可选
         url: 'mailto:afterainxyz@gmail.com'
 menu:
