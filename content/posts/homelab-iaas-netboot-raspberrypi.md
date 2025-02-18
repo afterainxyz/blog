@@ -72,42 +72,49 @@ author: "afterain"
 
 - 配置无盘启动
 
-	iSCSI详细配置参考[[HowTo] Booting from iSCSI](https://forums.raspberrypi.com/viewtopic.php?t=151302)
+	参考[Network Booting a Raspberry Pi 4 with an iSCSI Root](https://shawnwilsher.com/2020/05/network-booting-a-raspberry-pi-4-with-an-iscsi-root-via-freenas/)
 
-	- cmdline.txt
+	- 内核和启动
 
-		树莓派bootloader读取/`TFTP根目录`/`serial number目录`/`cmdline.txt文件`获取内核启动参数
-		
-		在树莓派原有内容基础上，增加iSCSI内容如下（IQN/LUN来自iSCSI配置，IQN `iqn.2000-01.com.synology:nas-afterainxyz.Target-1.2be99b1442`，LUN `7092246e`，`192.168.1.4`是指定树莓派的IP地址，`192.168.1.2`是iSCSI服务IP地址）
-		
-		```
-			ip=192.168.1.4::192.168.1.1:255.255.255.0:7092246e:eth0:off
-			ISCSI_INITIATOR={IQN}-{LUN}
-			ISCSI_TARGET_NAME={IQN}
-			ISCSI_TARGET_IP=192.168.1.2
-			ISCSI_TARGET_PORT=3260
-		```
-		
-		增加容器需要的内核参数（iSCSI无盘启动不是必须，只是为后续安装容器做准备）
-		
-		```
-			cgroup_memory=1 cgroup_enable=memory
-		```
-		
-		完整例子如下
-		
-		```
-			console=serial0,115200 console=tty1 root=UUID=e84ca015-c09a-4fa2-a17b-ba7edda6e353 rootfstype=ext4 ip=192.168.1.4::192.168.1.1:255.255.255.0:7092246e:eth0:off rw rootwait elevator=deadline fsck.repair=yes cgroup_memory=1 cgroup_enable=memory ISCSI_INITIATOR=iqn.2000-01.com.synology:nas-afterainxyz.Target-1.2be99b1442-6059186e ISCSI_TARGET_NAME=iqn.2000-01.com.synology:nas-afterainxyz.Target-1.2be99b1442 ISCSI_TARGET_IP=192.168.1.2 ISCSI_TARGET_PORT=3260
-		```		
+		iSCSI的内核参数参考[[HowTo] Booting from iSCSI](https://forums.raspberrypi.com/viewtopic.php?t=151302)(https://shawnwilsher.com/2020/05/network-booting-a-raspberry-pi-4-with-an-iscsi-root-via-freenas/)
 
-	- config.txt
+		- cmdline.txt
 
-		保持树莓派原有内容，修改initramfs内容如下
+			树莓派bootloader读取/`TFTP根目录`/`serial number目录`/`cmdline.txt文件`获取内核启动参数
 		
-		```
-			[all]
-			initramfs initrd.img-5.15.61-v8+ followkernel
-		```
+			在树莓派原有内容基础上，增加iSCSI内容如下（IQN/LUN来自iSCSI配置，IQN `iqn.2000-01.com.synology:nas-afterainxyz.Target-1.2be99b1442`，LUN `7092246e`，`192.168.1.4`是指定树莓派的IP地址，`192.168.1.2`是iSCSI服务IP地址）
+		
+			```
+				ip=192.168.1.4::192.168.1.1:255.255.255.0:7092246e:eth0:off
+				ISCSI_INITIATOR={IQN}-{LUN}
+				ISCSI_TARGET_NAME={IQN}
+				ISCSI_TARGET_IP=192.168.1.2
+				ISCSI_TARGET_PORT=3260
+			```
+		
+			增加容器需要的内核参数（iSCSI无盘启动不是必须，只是为后续安装容器做准备）
+		
+			```
+				cgroup_memory=1 cgroup_enable=memory
+			```
+		
+			完整例子如下
+		
+			```
+				console=serial0,115200 console=tty1 root=UUID=e84ca015-c09a-4fa2-a17b-ba7edda6e353 rootfstype=ext4 ip=192.168.1.4::192.168.1.1:255.255.255.0:7092246e:eth0:off rw rootwait elevator=deadline fsck.repair=yes cgroup_memory=1 cgroup_enable=memory ISCSI_INITIATOR=iqn.2000-01.com.synology:nas-afterainxyz.Target-1.2be99b1442-6059186e ISCSI_TARGET_NAME=iqn.2000-01.com.synology:nas-afterainxyz.Target-1.2be99b1442 ISCSI_TARGET_IP=192.168.1.2 ISCSI_TARGET_PORT=3260
+			```		
+
+		- config.txt
+	
+			保持树莓派原有内容，修改initramfs内容如下
+		
+			```
+				[all]
+				initramfs initrd.img-5.15.61-v8+ followkernel
+			```
+	- root分区
+
+		使用iSCSI工具（例如linux的iscsiadm）挂载 iSCSI服务提到的磁盘，格式化，然后复制树莓派根分区的所有文件到磁盘根目录下。
 
 - 取下SD卡后重启，等待网络启动完成
 
